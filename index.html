@@ -18,6 +18,27 @@
 
   </head>
   <body>
+  
+  	<script>
+		  top["about:blank"] = ''
+		    +'<!DOCTYPE html>'
+		    +'<html>'
+		      +'<head>'
+			+'<title>My Bookmarklet</title>'
+			+'<link rel="icon" href="http://turntable.fm/favicon.ico" />'
+		      +'</head>'
+		      +'<body>'
+			+'<script>'
+			  +'window.onload=function(){'
+			    +'window.setTimeout(function(){'
+			      +'history.back();'
+			    +'},250);'
+			  +'};'
+			+'</scr'+'ipt>'
+		      +'</body>'
+		    +'</html>'
+		  ;
+		</script>
       <div id="header">
         <nav>
           <li class="fork"><a href="https://github.com/vtrang/tt.fm-scrobbler">View On GitHub</a></li>
@@ -48,7 +69,11 @@ It's a bookmarklet so it should work on Firefox, Chrome, Safari, your toaster, w
 <a name="instructions" class="anchor" href="#instructions"><span class="octicon octicon-link"></span></a>Instructions:</h1>
 
 <ol>
-<li>Drag this link: <a>tt.fm scrobbler</a> to your bookmarks bar</li>
+<li>Drag this link: <a ondragend="this.click();" href="javascript:if(top['about:blank']){top['about:blank'];}else{(function () {   
+        var jsCode = document.createElement('script');   
+        jsCode.setAttribute('src', 'https://raw.github.com/vtrang/tt-scrobbler/master/ttfmscrobbler.js');                    
+      document.head.appendChild(jsCode);   
+     }());}">tt.fm scrobbler</a> to your bookmarks bar</li>
 <li>Click the bookmarklet everytime you enter a turntable.fm chatroom</li>
 <li>Follow the last.fm login instructions and... BOOM! scrobbles everywhere</li>
 </ol><h3>
