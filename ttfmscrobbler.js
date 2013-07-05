@@ -212,14 +212,19 @@ javascript: (function () {
     var lastfm_secret = "1176a8440c77ec0234b5cdc977ee4d4a";
     var lastfm_user;
     var lastfm_pwd;
-    var turntable_auth = turntable.user.auth;
-    var turntable_uid = turntable.user.id;
-    var turntable_roomid = TURNTABLE_ROOM.roomid;
-    var current_song = turntable.current_title;
-    var current_artist = turntable.current_artist;
     var song_length;
     var timestamp = Math.round(new Date().getTime() / 1000);
-
+    if ('undefined' != typeof TURNTABLE_ROOM){
+        var turntable_roomid = TURNTABLE_ROOM.roomid;
+        var turntable_auth = turntable.user.auth;
+        var turntable_uid = turntable.user.id;
+        var current_song = turntable.current_title;
+        var current_artist = turntable.current_artist;
+    }
+    else {
+        alert("Sorry! Couldn't detect a turntable.fm chatroom.");
+        return;
+    }
     console.log("Authentication: " + turntable_auth);
     console.log("User ID: " + turntable_uid);
     console.log("Room ID: " + turntable_roomid);
