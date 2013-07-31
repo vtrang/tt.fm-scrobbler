@@ -266,7 +266,7 @@ javascript: (function () {
         var current_artist = turntable.current_artist;
     }
     else {
-        alert("Sorry! Couldn't detect a turntable.fm chatroom.");
+        alert("Sorry! Couldn't detect a turntable.fm room.");
         return;
     }
     console.log("Authentication: " + turntable_auth);
@@ -300,46 +300,44 @@ javascript: (function () {
     }
     console.log(lastfm_user);
     console.log(lastfm_pwd);
-    var watch_count = 0;
     turntable.watch("current_title", function(id, oldVal, newVal){
-        watch_count++;
         console.log(id+' changed from ' +oldVal+' to '+newVal);
-        if (watch_count % 2 == 0){
-            var current_song = turntable.current_title;
-            var current_artist = turntable.current_artist;
-            var timestamp = Math.round(new Date().getTime() / 1000);
-            console.log("lastfm_key: " + lastfm_key);
-            console.log("current_artist: " + current_artist);
-            console.log("sessionkey: " + sessionkey);
-            console.log("timestamp: " + timestamp);
-            console.log("track: " + current_song);
-            console.log("secret: " + lastfm_secret);
+        
+        var current_song = newVal;
+        var current_artist = turntable.current_artist;
+        var timestamp = Math.round(new Date().getTime() / 1000);
+        console.log("lastfm_key: " + lastfm_key);
+        console.log("current_artist: " + current_artist);
+        console.log("sessionkey: " + sessionkey);
+        console.log("timestamp: " + timestamp);
+        console.log("track: " + current_song);
+        console.log("secret: " + lastfm_secret);
 
-            api_signature = md5("api_key" + lastfm_key + "artist" + current_artist + "methodtrack.updateNowPlaying" + "sk" + sessionkey + "track" + current_song + lastfm_secret);
-            params = "method=track.updateNowPlaying" + "&format=json" + "&artist=" + current_artist + "&track=" + current_song + "&api_key=" + lastfm_key + "&api_sig=" + api_signature + "&sk=" + sessionkey;
-            xmlreq.open("POST", baseURL, false);
-            xmlreq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlreq.setRequestHeader("Content-length", params.length);
-            xmlreq.setRequestHeader("Connection", "close");
-            xmlreq.send(params);
-            response = JSON.parse(xmlreq.response);
-            console.log(response);
+        api_signature = md5("api_key" + lastfm_key + "artist" + current_artist + "methodtrack.updateNowPlaying" + "sk" + sessionkey + "track" + current_song + lastfm_secret);
+        params = "method=track.updateNowPlaying" + "&format=json" + "&artist=" + current_artist + "&track=" + current_song + "&api_key=" + lastfm_key + "&api_sig=" + api_signature + "&sk=" + sessionkey;
+        xmlreq.open("POST", baseURL, false);
+        xmlreq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlreq.setRequestHeader("Content-length", params.length);
+        xmlreq.setRequestHeader("Connection", "close");
+        xmlreq.send(params);
+        response = JSON.parse(xmlreq.response);
+        console.log(response);
 
-            timeout = (turntable.buddyList.room.currentSong.metadata.length*1000)/2;
-            if (timeout > (30*1000)){
-                setTimeout(function(){
-                    api_signature = md5("api_key" + lastfm_key + "artist" + current_artist + "chosenByUser0" + "methodtrack.scrobble" + "sk" + sessionkey + "timestamp" + timestamp + "track" + current_song + lastfm_secret);
-                    params = "method=track.scrobble" + "&format=json" + "&artist=" + current_artist + "&track=" + current_song + "&timestamp=" + timestamp + "&chosenByUser=0" + "&api_key=" + lastfm_key + "&api_sig=" + api_signature + "&sk=" + sessionkey;
-                    xmlreq.open("POST", baseURL, false);
-                    xmlreq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    xmlreq.setRequestHeader("Content-length", params.length);
-                    xmlreq.setRequestHeader("Connection", "close");
-                    xmlreq.send(params);
-                    response = JSON.parse(xmlreq.response);
-                    console.log(response);
-                }, timeout);  
-            }   
-        }
+        timeout = (turntable.buddyList.room.currentSong.metadata.length*1000)/2;
+        if (timeout > (30*1000)){
+            setTimeout(function(){
+                api_signature = md5("api_key" + lastfm_key + "artist" + current_artist + "chosenByUser0" + "methodtrack.scrobble" + "sk" + sessionkey + "timestamp" + timestamp + "track" + current_song + lastfm_secret);
+                params = "method=track.scrobble" + "&format=json" + "&artist=" + current_artist + "&track=" + current_song + "&timestamp=" + timestamp + "&chosenByUser=0" + "&api_key=" + lastfm_key + "&api_sig=" + api_signature + "&sk=" + sessionkey;
+                xmlreq.open("POST", baseURL, false);
+                xmlreq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xmlreq.setRequestHeader("Content-length", params.length);
+                xmlreq.setRequestHeader("Connection", "close");
+                xmlreq.send(params);
+                response = JSON.parse(xmlreq.response);
+                console.log(response);
+            }, timeout);  
+        }   
+        
        return newVal;
     });
 }())
